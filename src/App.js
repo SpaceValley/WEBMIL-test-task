@@ -1,6 +1,6 @@
 import React from 'react';
-import NavigationRoot from './NavigationRoot';
-import NavigationService from './NavigationService';
+import NavigationRoot from './navigation/NavigationRoot';
+import NavigationService from './navigation/NavigationService';
 
 const App = () => (
   <NavigationRoot

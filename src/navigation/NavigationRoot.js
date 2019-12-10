@@ -1,8 +1,8 @@
 import {createStackNavigator} from 'react-navigation-stack';
 import {createAppContainer} from 'react-navigation';
 
-import HomeScreen from './screens/HomeScreen';
-import SinglePostScreen from './screens/SinglePostScreen';
+import HomeScreen from '../screens/HomeScreen';
+import SinglePostScreen from '../screens/SinglePostScreen';
 
 const NavigationRoot = createStackNavigator({
   HomeScreen: {

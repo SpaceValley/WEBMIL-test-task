@@ -2,12 +2,19 @@ import * as actions from './constants';
 
 const initialState = {
   posts: [],
+  users: [],
   isLoading: false,
-  userIdPosts: '',
+  userIdFilter: '1',
   clickedPost: {
     id: null,
     title: '',
     text: '',
+  },
+  postAuthorData: {
+    name: '',
+    username: '',
+    email: '',
+    website: '',
   },
   comments: [],
   fetchError: false,
@@ -16,35 +23,49 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case actions.GET_POSTS_START:
-      console.log('get posts START');
       return {
         ...state,
         isLoading: true,
         fetchError: false,
       };
     case actions.GET_POSTS_SUCCESS:
-      console.log('get posts suc', action.payload);
       return {
         ...state,
         posts: action.payload,
         isLoading: false,
       };
+    case actions.GET_USERS_START:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case actions.GET_USERS_SUCCESS:
+      return {
+        ...state,
+        users: action.payload,
+        isLoading: false,
+      };
     case actions.GET_DATA_FAILURE:
-      console.log('get data FAILURE');
       return {
         ...state,
         isLoading: false,
         fetchError: true,
       };
-    case actions.USER_ID_CHANGE:
-      console.log('userId', action.payload);
+    case actions.FILTER_USER:
+      const author = state.users[action.payload - 1];
+      const authorData = {
+        name: author.name,
+        username: author.username,
+        email: author.email,
+        website: author.website,
+      };
       return {
         ...state,
-        userIdPosts: action.payload,
+        userIdFilter: action.payload,
         isLoading: true,
+        postAuthorData: authorData,
       };
     case actions.CLICKED_POST_SAVE:
-      console.log('save clicked post', action.payload);
       return {
         ...state,
         clickedPost: {
@@ -54,14 +75,12 @@ export default function(state = initialState, action) {
         },
       };
     case actions.GET_COMMENTS_START:
-      console.log('get comments START');
       return {
         ...state,
         isLoading: true,
         fetchError: false,
       };
     case actions.GET_COMMENTS_SUCCESS:
-      console.log('get comments suc', action.payload);
       return {
         ...state,
         comments: action.payload,

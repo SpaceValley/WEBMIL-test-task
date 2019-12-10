@@ -6,7 +6,13 @@ import {fetchPostsStart} from '../actions';
 
 class SinglePostScreen extends React.Component {
   render() {
-    const {clickedPost, isLoading, comments, fetchError} = this.props;
+    const {
+      clickedPost,
+      isLoading,
+      postAuthorData,
+      comments,
+      fetchError,
+    } = this.props;
 
     if (fetchError) {
       return (
@@ -29,6 +35,32 @@ class SinglePostScreen extends React.Component {
             №{clickedPost.id}: {clickedPost.title}
           </Text>
           <Text style={styles.postText}>{clickedPost.text}</Text>
+          <View style={styles.authorInfoWrap}>
+            <Text style={styles.authorName}>
+              Written by {postAuthorData.name}
+            </Text>
+            <View style={styles.authorInfo}>
+              <Text style={styles.commentUserInfo}>
+                @Username: {postAuthorData.username}
+              </Text>
+            </View>
+            <View style={styles.authorInfo}>
+              <Image
+                source={require('../assets/img/email_icon.png')}
+                style={styles.commentIcon}
+              />
+              <Text style={styles.commentUserInfo}>{postAuthorData.email}</Text>
+            </View>
+            <View style={styles.authorInfo}>
+              <Image
+                source={require('../assets/img/website_icon.png')}
+                style={styles.commentIcon}
+              />
+              <Text style={styles.commentUserInfo}>
+                {postAuthorData.website}
+              </Text>
+            </View>
+          </View>
           <AnimatedLoader
             visible={isLoading}
             overlayColor="rgba(255,255,255,0.75)"
@@ -95,6 +127,7 @@ const styles = StyleSheet.create({
   },
   postTitle: {
     fontSize: 20,
+    fontWeight: 'bold',
     marginBottom: 10,
     width: '100%',
   },
@@ -102,8 +135,26 @@ const styles = StyleSheet.create({
     fontSize: 15,
     width: '100%',
   },
+  authorInfoWrap: {
+    marginTop: 20,
+    marginLeft: 10,
+  },
+  authorName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  authorInfo: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginBottom: 10,
+    marginLeft: 15,
+  },
   commentsTitle: {
     fontSize: 20,
+    fontWeight: 'bold',
     marginTop: 15,
     marginBottom: 20,
   },

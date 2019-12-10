@@ -1,4 +1,4 @@
-import NavigationService from './NavigationService';
+import NavigationService from './navigation/NavigationService';
 import * as actions from './constants';
 import axios from 'axios';
 
@@ -22,9 +22,29 @@ export const fetchPostsSuccess = res => ({
   payload: res,
 });
 
+export const fetchUsersStart = () => {
+  return dispatch => {
+    dispatch({type: actions.GET_USERS_START});
+    axios
+      .get('https://jsonplaceholder.typicode.com/users')
+      .then(res => {
+        dispatch(fetchUsersSuccess(res.data));
+      })
+      .catch(err => {
+        console.log(err);
+        dispatch({type: actions.GET_DATA_FAILURE});
+      });
+  };
+};
+
+export const fetchUsersSuccess = res => ({
+  type: actions.GET_USERS_SUCCESS,
+  payload: res,
+});
+
 export const handleUserChange = userId => {
   return dispatch => {
-    dispatch({type: actions.USER_ID_CHANGE, payload: userId});
+    dispatch({type: actions.FILTER_USER, payload: userId});
     dispatch(fetchUserPostStart(userId));
   };
 };

@@ -12,6 +12,7 @@ import AnimatedLoader from 'react-native-animated-loader';
 import {connect} from 'react-redux';
 import {
   fetchPostsStart,
+  fetchUsersStart,
   handleUserChange,
   saveClickedPostData,
 } from '../actions';
@@ -19,10 +20,11 @@ import {
 class HomeScreen extends React.Component {
   componentDidMount() {
     this.props.fetchPostsStart();
+    this.props.fetchUsersStart();
   }
 
   render() {
-    const {isLoading, posts, userIdPosts, fetchError} = this.props;
+    const {isLoading, posts, users, userIdFilter, fetchError} = this.props;
 
     if (fetchError) {
       return (
@@ -41,22 +43,27 @@ class HomeScreen extends React.Component {
       <ScrollView>
         <View style={styles.container}>
           <Text style={styles.title}>Posts List</Text>
-          <Picker
-            selectedValue={userIdPosts}
-            style={styles.userPicker}
-            onValueChange={itemValue => this.props.handleUserChange(itemValue)}>
-            <Picker.Item label="Select User" />
-            <Picker.Item label="User 1" value="1" />
-            <Picker.Item label="User 2" value="2" />
-            <Picker.Item label="User 3" value="3" />
-            <Picker.Item label="User 4" value="4" />
-            <Picker.Item label="User 5" value="5" />
-            <Picker.Item label="User 6" value="6" />
-            <Picker.Item label="User 7" value="7" />
-            <Picker.Item label="User 8" value="8" />
-            <Picker.Item label="User 9" value="9" />
-            <Picker.Item label="User 10" value="10" />
-          </Picker>
+          <View style={styles.filterWrap}>
+            <Text style={styles.filterTitle}>Select User:</Text>
+            <Picker
+              selectedValue={userIdFilter}
+              style={styles.userPicker}
+              onValueChange={itemValue =>
+                this.props.handleUserChange(itemValue)
+              }>
+              {users.length !== 0
+                ? users.map(user => {
+                    return (
+                      <Picker.Item
+                        label={user.username}
+                        value={user.id}
+                        key={user.id}
+                      />
+                    );
+                  })
+                : null}
+            </Picker>
+          </View>
           <AnimatedLoader
             visible={isLoading}
             overlayColor="rgba(255,255,255,0.75)"
@@ -97,6 +104,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   fetchPostsStart,
+  fetchUsersStart,
   handleUserChange,
   saveClickedPostData,
 };
@@ -123,11 +131,23 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 25,
+    fontWeight: 'bold',
     textAlign: 'center',
   },
+  filterWrap: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  filterTitle: {
+    fontSize: 16,
+    marginRight: 15,
+    marginLeft: 15,
+  },
   userPicker: {
-    height: 80,
-    width: 200,
+    height: 90,
+    width: 175,
   },
   postWrap: {
     marginBottom: 20,
@@ -139,6 +159,7 @@ const styles = StyleSheet.create({
   },
   postTitle: {
     fontSize: 20,
+    fontWeight: 'bold',
     marginBottom: 10,
   },
   postText: {
